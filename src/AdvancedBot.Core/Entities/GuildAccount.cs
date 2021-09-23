@@ -13,6 +13,9 @@ namespace AdvancedBot.Core.Entities
         public ulong ModRoleId { get; set; }
         public List<CommandSettings> Commands { get; set; }
         public string DefaultDisplayPrefix => string.IsNullOrEmpty(Prefixes[0]) ? "!" : Prefixes[0];
+        public ulong DjRoleId { get; set; }
+        public bool PlayerShouldLoop { get; set; }
+        public int ServerVolume { get; set; }
 
         #endregion
 

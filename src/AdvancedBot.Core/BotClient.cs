@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using AdvancedBot.Core.Commands;
 using AdvancedBot.Core.Services;
+using Victoria;
+using Interactivity;
 
 namespace AdvancedBot.Core
 {
@@ -15,6 +17,8 @@ namespace AdvancedBot.Core
         private DiscordSocketClient _client;
         private CustomCommandService _commands;
         private IServiceProvider _services;
+        private LavaNode _lavaNode;
+        private LavaLinkAudio _audioService;
 
         public BotClient(CustomCommandService commands = null, DiscordSocketClient client = null)
         {
@@ -30,22 +34,28 @@ namespace AdvancedBot.Core
                 CaseSensitiveCommands = false,
                 LogLevel = LogSeverity.Info,
                 BotInviteIsPrivate = true,
-                RepositoryUrl = "https://github.com/svr333/AdvancedBot-Template"
+                RepositoryUrl = "https://github.com/svr333/TempMusicBot"
             });
         }
 
         public async Task InitializeAsync()
         {
             _services = ConfigureServices();
+            _lavaNode = _services.GetRequiredService<LavaNode>();
+            _audioService = _services.GetRequiredService<LavaLinkAudio>();
 
             _client.Ready += OnReadyAsync;
+            _lavaNode.OnTrackException += _audioService.TrackException;
+            _lavaNode.OnTrackEnded += _audioService.TrackEnded;
+            _lavaNode.OnTrackStarted += _audioService.TrackStarted;
 
+            _lavaNode.OnLog += LogAsync;
             _client.Log += LogAsync;
             _commands.Log += LogAsync;
 
-            var token = Environment.GetEnvironmentVariable("Token");
+            var token = Environment.GetEnvironmentVariable("MusicToken");
 
-            await Task.Delay(10).ContinueWith(t => _client.LoginAsync(TokenType.Bot, token));
+            await Task.Delay(10).ContinueWith(t => _client.LoginAsync(TokenType.Bot, "ODg3MzUxMzE0NTU4ODk0MDky.YUC4Tw.Ad7aAuceCLDDpZv7WRLhO2LWhqQ"));
             await _client.StartAsync();
 
             await _services.GetRequiredService<CommandHandlerService>().InitializeAsync();
@@ -56,7 +66,10 @@ namespace AdvancedBot.Core
             => Console.WriteLine($"{msg.Source}: {msg.Message}");
 
         private async Task OnReadyAsync()
-            => await _client.SetGameAsync("Being a bot.");
+        {
+            await _lavaNode.ConnectAsync();
+            await _client.SetGameAsync("Being a bot.");
+        }
 
         private ServiceProvider ConfigureServices()
         {
@@ -68,6 +81,11 @@ namespace AdvancedBot.Core
                 .AddSingleton<GuildAccountService>()
                 .AddSingleton<PaginatorService>()
                 .AddSingleton<CommandPermissionService>()
+                .AddSingleton<LavaNode>()
+                .AddSingleton(new LavaConfig())
+                .AddSingleton<LavaLinkAudio>()
+                .AddSingleton<InteractivityService>()
+                .AddSingleton(new InteractivityConfig { DefaultTimeout = TimeSpan.FromSeconds(45) })
                 .BuildServiceProvider();
         }
     }

@@ -1,12 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <NoWarn>NU1605</NoWarn>
+    <LangVersion>9.0</LangVersion>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.2.0"/>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0"/>
-    <PackageReference Include="LiteDB" Version="5.0.9"/>
-    <PackageReference Include="Humanizer" Version="2.8.26"/>
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0-preview.3.21201.4"/>
+    <PackageReference Include="Discord.InteractivityAddon.Labs" Version="2.4.1-labs-20210709.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="LiteDB" Version="5.0.9" />
+    <PackageReference Include="Humanizer" Version="2.8.26" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0-preview.3.21201.4" />
+    <PackageReference Include="Genius.NET" Version="4.0.1" />
+    <PackageReference Include="DiscordNetLabs.Victoria" Version="5.2.1.1" />
+    <PackageReference Include="Discord.Net.Labs" Version="3.0.3" />
   </ItemGroup>
 </Project>

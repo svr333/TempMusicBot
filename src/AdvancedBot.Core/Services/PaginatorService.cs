@@ -28,7 +28,7 @@ namespace AdvancedBot.Core.Services
             _client.ReactionAdded += OnReactionUpdatedAsync;
         }
 
-        private async Task OnReactionUpdatedAsync(Cacheable<IUserMessage, ulong> msg, ISocketMessageChannel channel, SocketReaction reaction)
+        private async Task OnReactionUpdatedAsync(Cacheable<IUserMessage, ulong> msg, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             var message = await msg.GetOrDownloadAsync();
 
